@@ -13,7 +13,7 @@ class Show {
     private String[] cast;
     private String[] country;
     private Date date;
-    private int release_year;
+    private Integer release_year;
     private String rating;
     private String duration;
     private String[] listen_in;
@@ -156,7 +156,7 @@ class Show {
     public void printShowComplete() {
         System.out.println(
                 "=> " + show_Id + " ## " + type + " ## " + title + " ## " + Arrays.toString(director) + " ## " + Arrays.toString(cast) +
-                        " ## " + Arrays.toString(country) + " ## " + date + " ## " + release_year + " ## " + rating + " ## " + duration
+                        " ## " + Arrays.toString(country) + " ## " + (date == null ? "NaN" : date) + " ## " + (release_year == null ? "NaN" : release_year) + " ## " + rating + " ## " + duration
                         + " ## " + Arrays.toString(listen_in) + "");
     }
 
@@ -186,28 +186,32 @@ class Show {
                             campo.append(c);
                         }
                     }
-                    str[j] = campo.toString().trim();
+                    
+                    if (j < str.length) str[j] = campo.toString().trim();
+
+                    // Proteção: ignora se show_Id (campo obrigatório) estiver vazio ou nulo
+                    if (str[0] == null || str[0].isEmpty()) continue;
+
     
                     this.show_Id = str[0];
                     this.type = str[1];
                     this.title = str[2];
-                    this.director = str[3].isEmpty() ? new String[]{"NaN"} : str[3].split(", ");
-                    this.cast = str[4].isEmpty() ? new String[]{"NaN"} : str[4].split(", ");
-    
-                    this.country = str[5].isEmpty() ? new String[]{"NaN"} : str[5].split(", "); // Se precisar ser um array, mude o tipo do atributo
-    
+                    this.director = (str[3] == null || str[3].isEmpty()) ? new String[]{"NaN"} : str[3].split(", "); // se tiver vazio ou null, recebe NaN, se não pega o valor
+                    this.cast = (str[4] == null || str[4].isEmpty()) ? new String[]{"NaN"} : str[4].split(", "); // se tiver vazio ou null, recebe NaN, se não pega o valor
+                    this.country = (str[5] == null || str[5].isEmpty()) ? new String[]{"NaN"} : str[5].split(", "); // se tiver vazio ou null, recebe NaN, se não pega o valor
+                        
                     try {
                         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy", Locale.US);
-                        this.date = str[6].isEmpty() ? null : dateFormat.parse(str[6]);
+                        this.date = str[6].isEmpty() ? null : dateFormat.parse(str[6]); // caso esteja vazio estou tratando no print
                     } catch (Exception e) {
                         System.out.println("Erro ao converter data: " + str[6]);
                         this.date = null;
                     }
     
-                    this.release_year = str[7].isEmpty() ? 0 : Integer.parseInt(str[7]);
+                    this.release_year = (str[7] == null || str[7].isEmpty()) ? null : Integer.parseInt(str[7]); // caso esteja vazio estou tratando no print
                     this.rating = str[8];
                     this.duration = str[9];
-                    this.listen_in = (str[10] == null || str[10].isEmpty()) ? new String[]{"NaN"} : str[10].split(", ");
+                    this.listen_in = (str[10] == null || str[10].isEmpty()) ? new String[]{"NaN"} : str[10].split(", "); // se tiver vazio ou null, recebe NaN, se não pega o valor
     
                 }
                 printShowComplete();
@@ -226,8 +230,6 @@ public class Main {
 
     public static void main(String[] args) {
         Show show = new Show();
-        show.read();
-        show.read();
         show.read();
     }
 
