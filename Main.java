@@ -165,9 +165,9 @@ class Show {
         try {
             RandomAccessFile arqPtr = new RandomAccessFile("tmp/disneyplus.csv", "r");
             arqPtr.seek(0);
-            arqPtr.readLine();
+            arqPtr.readLine(); //pula o cabeçalho, para não dar erro na Primeira leitura
             String linhaAtual;
-            while((linhaAtual = arqPtr.readLine()) != null) {
+            while((linhaAtual = arqPtr.readLine()) != null) { // enquanto nao for fim do arquivo
     
                     StringBuilder campo = new StringBuilder();
                     boolean dentroAspas = false;
@@ -191,10 +191,10 @@ class Show {
                     this.show_Id = str[0];
                     this.type = str[1];
                     this.title = str[2];
-                    this.director = str[3].isEmpty() ? new String[]{"Nan"} : str[3].split(", ");
-                    this.cast = str[4].isEmpty() ? new String[]{"Nan"} : str[4].split(", ");
+                    this.director = str[3].isEmpty() ? new String[]{"NaN"} : str[3].split(", ");
+                    this.cast = str[4].isEmpty() ? new String[]{"NaN"} : str[4].split(", ");
     
-                    this.country = str[5].isEmpty() ? new String[]{"Nan"} : str[5].split(", "); // Se precisar ser um array, mude o tipo do atributo
+                    this.country = str[5].isEmpty() ? new String[]{"NaN"} : str[5].split(", "); // Se precisar ser um array, mude o tipo do atributo
     
                     try {
                         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy", Locale.US);
@@ -207,7 +207,7 @@ class Show {
                     this.release_year = str[7].isEmpty() ? 0 : Integer.parseInt(str[7]);
                     this.rating = str[8];
                     this.duration = str[9];
-                    this.listen_in = (str[10] == null || str[10].isEmpty()) ? new String[]{"Nan"} : str[10].split(", ");
+                    this.listen_in = (str[10] == null || str[10].isEmpty()) ? new String[]{"NaN"} : str[10].split(", ");
     
                 }
                 printShowComplete();
