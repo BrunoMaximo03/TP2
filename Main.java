@@ -192,10 +192,10 @@ class Show {
                     // Proteção: ignora se show_Id (campo obrigatório) estiver vazio ou nulo
                     if (str[0] == null || str[0].isEmpty()) continue;
 
-    
-                    this.show_Id = str[0];
-                    this.type = str[1];
-                    this.title = str[2];
+     
+                    this.show_Id = str[0]; //primeira parte do vetor guarda o Show_Id
+                    this.type = str[1]; // segunda parte guarda o Type
+                    this.title = str[2]; // terceira parte guarda o Title
                     this.director = (str[3] == null || str[3].isEmpty()) ? new String[]{"NaN"} : str[3].split(", "); // se tiver vazio ou null, recebe NaN, se não pega o valor
                     this.cast = (str[4] == null || str[4].isEmpty()) ? new String[]{"NaN"} : str[4].split(", "); // se tiver vazio ou null, recebe NaN, se não pega o valor
                     this.country = (str[5] == null || str[5].isEmpty()) ? new String[]{"NaN"} : str[5].split(", "); // se tiver vazio ou null, recebe NaN, se não pega o valor
@@ -209,8 +209,8 @@ class Show {
                     }
     
                     this.release_year = (str[7] == null || str[7].isEmpty()) ? null : Integer.parseInt(str[7]); // caso esteja vazio estou tratando no print
-                    this.rating = str[8];
-                    this.duration = str[9];
+                    this.rating = str[8]; // nona parte guarda o rating
+                    this.duration = str[9]; // décima parte guarda o rating
                     this.listen_in = (str[10] == null || str[10].isEmpty()) ? new String[]{"NaN"} : str[10].split(", "); // se tiver vazio ou null, recebe NaN, se não pega o valor
     
                 }
