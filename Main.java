@@ -1,5 +1,6 @@
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
@@ -155,98 +156,92 @@ class Show {
 
     public void printShowComplete() {
         System.out.println(
-                "=> " + show_Id + " ## " + type + " ## " + title + " ## " + Arrays.toString(director) + " ## " + Arrays.toString(cast) +
-                        " ## " + Arrays.toString(country) + " ## " + (date == null ? "NaN" : date) + " ## " + (release_year == null ? "NaN" : release_year) + " ## " + rating + " ## " + duration
+                "=> " + show_Id + " ## " + type + " ## " + title + " ## " + Arrays.toString(director) + " ## "
+                        + Arrays.toString(cast) +
+                        " ## " + Arrays.toString(country) + " ## " + (date == null ? "NaN" : date) + " ## "
+                        + (release_year == null ? "NaN" : release_year) + " ## " + rating + " ## " + duration
                         + " ## " + Arrays.toString(listen_in) + "");
     }
 
-    public void read() {
+    public static Show[] readCSV() {
+        ArrayList<Show> lista = new ArrayList<>();
 
         try {
+
             RandomAccessFile arqPtr = new RandomAccessFile("tmp/disneyplus.csv", "r");
             arqPtr.seek(0);
-            arqPtr.readLine(); //pula o cabeçalho, para não dar erro na Primeira leitura
+            arqPtr.readLine(); // pula o cabeçalho, para não dar erro na Primeira leitura
+
             String linhaAtual;
-            while((linhaAtual = arqPtr.readLine()) != null) { // enquanto nao for fim do arquivo
-    
-                    StringBuilder campo = new StringBuilder();
-                    boolean dentroAspas = false;
-    
-                    String[] str = new String[12];
-                    int j = 0; // Faz referência aos 11 atributos, irá ser o contador deles
-    
-                    for (int i = 0; i < linhaAtual.length(); i++) {
-                        char c = linhaAtual.charAt(i);
-                        if (c == '"') {
-                            dentroAspas = !dentroAspas;
-                        } else if (c == ',' && !dentroAspas) {
-                            str[j++] = campo.toString().trim();
-                            campo.setLength(0);  // campo fica zerado para ser preenchido novamente
-                        } else {
-                            campo.append(c);
-                        }
-                    }
-                    
-                    if (j < str.length) str[j] = campo.toString().trim();
+            while ((linhaAtual = arqPtr.readLine()) != null) { // enquanto nao for fim do arquivo
 
-                    // Proteção: ignora se show_Id (campo obrigatório) estiver vazio ou nulo
-                    if (str[0] == null || str[0].isEmpty()) continue;
+                StringBuilder campo = new StringBuilder();
+                boolean dentroAspas = false;
 
-     
-                    this.show_Id = str[0]; //primeira parte do vetor guarda o Show_Id
-                    this.type = str[1]; // segunda parte guarda o Type
-                    this.title = str[2]; // terceira parte guarda o Title
-                    this.director = (str[3] == null || str[3].isEmpty()) ? new String[]{"NaN"} : str[3].split(", "); // se tiver vazio ou null, recebe NaN, se não pega o valor
-                    this.cast = (str[4] == null || str[4].isEmpty()) ? new String[]{"NaN"} : str[4].split(", "); // se tiver vazio ou null, recebe NaN, se não pega o valor
-                    this.country = (str[5] == null || str[5].isEmpty()) ? new String[]{"NaN"} : str[5].split(", "); // se tiver vazio ou null, recebe NaN, se não pega o valor
-                        
-                    try {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy", Locale.US);
-                        this.date = str[6].isEmpty() ? null : dateFormat.parse(str[6]); // caso esteja vazio estou tratando no print
-                    } catch (Exception e) {
-                        System.out.println("Erro ao converter data: " + str[6]);
-                        this.date = null;
+                String[] str = new String[12];
+                int j = 0; // Faz referência aos 11 atributos, irá ser o contador deles
+
+                for (int i = 0; i < linhaAtual.length(); i++) {
+                    char c = linhaAtual.charAt(i);
+                    if (c == '"') {
+                        dentroAspas = !dentroAspas;
+                    } else if (c == ',' && !dentroAspas) {
+                        str[j++] = campo.toString().trim();
+                        campo.setLength(0); // campo fica zerado
+                    } else {
+                        campo.append(c);
                     }
-    
-                    this.release_year = (str[7] == null || str[7].isEmpty()) ? null : Integer.parseInt(str[7]); // caso esteja vazio estou tratando no print
-                    this.rating = str[8]; // nona parte guarda o rating
-                    this.duration = str[9]; // décima parte guarda o rating
-                    this.listen_in = (str[10] == null || str[10].isEmpty()) ? new String[]{"NaN"} : str[10].split(", "); // se tiver vazio ou null, recebe NaN, se não pega o valor
-    
                 }
-                printShowComplete();
-    
-                // Outros
-                arqPtr.close();
-           
+
+                if (j < str.length) {
+                    str[j] = campo.toString().trim();
+                }
+
+                // Proteção: ignora se show_Id (campo obrigatório) estiver vazio ou nulo
+                if (str[0] == null || str[0].isEmpty())
+                    continue;
+
+                Show show = new Show();
+                
+                show.setShow_Id(str[0]);
+                show.setType(str[1]);
+                show.setTitle(str[2]);
+                show.setDirector((str[3] == null || str[3].isEmpty()) ? new String[] { "NaN" } : str[3].split(", "));
+                show.setCast((str[4] == null || str[4].isEmpty()) ? new String[] { "NaN" } : str[4].split(", "));
+                show.setCountry((str[5] == null || str[5].isEmpty()) ? new String[] { "NaN" } : str[5].split(", "));
+
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy", Locale.US);
+                    show.setDate(str[6].isEmpty() ? null : dateFormat.parse(str[6]));
+                } catch (Exception e) {
+                    show.setDate(null);
+                }
+
+                show.setReleaseYear((str[7] == null || str[7].isEmpty()) ? 0 : Integer.parseInt(str[7]));
+                show.setRating(str[8]);
+                show.setDuration(str[9]);
+                show.setListenIn((str[10] == null || str[10].isEmpty()) ? new String[] { "NaN" } : str[10].split(", "));
+
+                lista.add(show);
+            }
+
+            arqPtr.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-    }
+        return lista.toArray(new Show[lista.size()]); //Converte uma ArrayList<Show> em um Show[]
 
-    public void ordenaAlfabetico(Show[] array) {
-        for (int i = 1; i < array.length; i++) {
-            Show tmp = array[i];  // pega o elemento atual
-            int j = i - 1;
-    
-            // compara os títulos usando compareTo (ordem alfabética)
-            while (j >= 0 && array[j].getTitle().compareToIgnoreCase(tmp.getTitle()) > 0) {
-                array[j + 1] = array[j];  // move o elemento para a direita
-                j--;
-            }
-    
-            array[j + 1] = tmp;  // insere o elemento na posição correta
-        }
     }
-    
 }
 
 public class Main {
-
     public static void main(String[] args) {
-        Show show = new Show();
-        show.read();
-    }
+        Show[] vetor = Show.readCSV();
 
+        for (Show s : vetor) {
+            s.printShowComplete();
+        }
+    }
 }
