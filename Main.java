@@ -181,7 +181,7 @@ class Show {
                             dentroAspas = !dentroAspas;
                         } else if (c == ',' && !dentroAspas) {
                             str[j++] = campo.toString().trim();
-                            campo.setLength(0);
+                            campo.setLength(0);  // campo fica zerado para ser preenchido novamente
                         } else {
                             campo.append(c);
                         }
@@ -224,6 +224,22 @@ class Show {
         }
 
     }
+
+    public void ordenaAlfabetico(Show[] array) {
+        for (int i = 1; i < array.length; i++) {
+            Show tmp = array[i];  // pega o elemento atual
+            int j = i - 1;
+    
+            // compara os títulos usando compareTo (ordem alfabética)
+            while (j >= 0 && array[j].getTitle().compareToIgnoreCase(tmp.getTitle()) > 0) {
+                array[j + 1] = array[j];  // move o elemento para a direita
+                j--;
+            }
+    
+            array[j + 1] = tmp;  // insere o elemento na posição correta
+        }
+    }
+    
 }
 
 public class Main {
