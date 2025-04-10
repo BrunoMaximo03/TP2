@@ -19,16 +19,28 @@ class Show {
     private String duration;
     private String[] listen_in;
 
+    // Construtor padrão com arrays preenchidos
     public Show() {
-        this("", "", "", null, null, null, new Date(), 0, "", "", null);
+        this("", "", "", new String[] { "NaN" }, new String[] { "NaN" }, new String[] { "NaN" }, new Date(), 0, "", "", new String[] { "NaN" });
     }
 
+    // Construtor de cópia
     public Show(Show objeto) {
+        this.show_Id = objeto.show_Id;
+        this.type = objeto.type;
+        this.title = objeto.title;
+        this.director = objeto.director != null ? objeto.director.clone() : null;
+        this.cast = objeto.cast != null ? objeto.cast.clone() : null;
+        this.country = objeto.country != null ? objeto.country.clone() : null;
+        this.date = objeto.date != null ? (Date) objeto.date.clone() : null;
+        this.release_year = objeto.release_year;
+        this.rating = objeto.rating;
+        this.duration = objeto.duration;
+        this.listen_in = objeto.listen_in != null ? objeto.listen_in.clone() : null;
     }
 
     public Show(String show_Id, String type, String title, String[] director, String[] cast, String[] country,
-            Date date,
-            int release_year, String rating, String duration, String[] listen_in) {
+            Date date, int release_year, String rating, String duration, String[] listen_in) {
         this.show_Id = show_Id;
         this.type = type;
         this.title = title;
@@ -44,142 +56,60 @@ class Show {
 
     /* ===================== MÉTODOS SETS ===================== */
 
-    public void setShow_Id(String show_Id) {
-        this.show_Id = show_Id;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDirector(String[] director) {
-        this.director = director;
-    }
-
-    public void setCast(String[] cast) {
-        this.cast = cast;
-    }
-
-    public void setCountry(String[] country) {
-        this.country = country;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public void setReleaseYear(int release_year) {
-        this.release_year = release_year;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
-    public void setListenIn(String[] listen_in) {
-        this.listen_in = listen_in;
-    }
+    public void setShow_Id(String show_Id) { this.show_Id = show_Id; }
+    public void setType(String type) { this.type = type; }
+    public void setTitle(String title) { this.title = title; }
+    public void setDirector(String[] director) { this.director = director; }
+    public void setCast(String[] cast) { this.cast = cast; }
+    public void setCountry(String[] country) { this.country = country; }
+    public void setDate(Date date) { this.date = date; }
+    public void setReleaseYear(int release_year) { this.release_year = release_year; }
+    public void setRating(String rating) { this.rating = rating; }
+    public void setDuration(String duration) { this.duration = duration; }
+    public void setListenIn(String[] listen_in) { this.listen_in = listen_in; }
 
     /* ==================== MÉTODOS GETS ==================== */
 
-    public String getShow_Id() {
-        return this.show_Id;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String[] getDirector() {
-        return this.director;
-    }
-
-    public String[] getCast() {
-        return this.cast;
-    }
-
-    public String[] getCountry() {
-        return this.country;
-    }
-
-    public Date getDate() {
-        return this.date;
-    }
-
-    public int getReleaseYear() {
-        return this.release_year;
-    }
-
-    public String getRating() {
-        return this.rating;
-    }
-
-    public String getDuration() {
-        return this.duration;
-    }
-
-    public String[] getListenIn() {
-        return this.listen_in;
-    }
+    public String getShow_Id() { return this.show_Id; }
+    public String getType() { return this.type; }
+    public String getTitle() { return this.title; }
+    public String[] getDirector() { return this.director; }
+    public String[] getCast() { return this.cast; }
+    public String[] getCountry() { return this.country; }
+    public Date getDate() { return this.date; }
+    public int getReleaseYear() { return this.release_year; }
+    public String getRating() { return this.rating; }
+    public String getDuration() { return this.duration; }
+    public String[] getListenIn() { return this.listen_in; }
 
     /* ================== CLONE ===================== */
 
     public Show cloneClasse(Show object) {
-        Show objectDupliShow = new Show();
-
-        objectDupliShow.setShow_Id(object.getShow_Id());
-        objectDupliShow.setType(object.getType());
-        objectDupliShow.setTitle(object.getTitle());
-        objectDupliShow.setDirector(object.getDirector());
-        objectDupliShow.setCast(object.getCast());
-        objectDupliShow.setCountry(object.getCountry());
-        objectDupliShow.setDate(object.getDate());
-        objectDupliShow.setReleaseYear(object.getReleaseYear());
-        objectDupliShow.setRating(object.getRating());
-        objectDupliShow.setDuration(object.getDuration());
-        objectDupliShow.setListenIn(object.getListenIn());
-
-        return objectDupliShow;
+        return new Show(object); // utiliza o construtor de cópia
     }
 
     public void printShowComplete() {
         System.out.println(
-                "=> " + show_Id + " ## " + type + " ## " + title + " ## " + Arrays.toString(director) + " ## "
-                        + Arrays.toString(cast) +
-                        " ## " + Arrays.toString(country) + " ## " + (date == null ? "NaN" : date) + " ## "
-                        + (release_year == null ? "NaN" : release_year) + " ## " + rating + " ## " + duration
-                        + " ## " + Arrays.toString(listen_in) + "");
+            "=> " + show_Id + " ## " + type + " ## " + title + " ## " + Arrays.toString(director) + " ## "
+            + Arrays.toString(cast) + " ## " + Arrays.toString(country) + " ## " + (date == null ? "NaN" : date)
+            + " ## " + (release_year == null ? "NaN" : release_year) + " ## " + rating + " ## " + duration
+            + " ## " + Arrays.toString(listen_in));
     }
 
     public static Show[] readCSV() {
         ArrayList<Show> lista = new ArrayList<>();
 
         try {
-
             RandomAccessFile arqPtr = new RandomAccessFile("tmp/disneyplus.csv", "r");
-            arqPtr.seek(0);
-            arqPtr.readLine(); // pula o cabeçalho, para não dar erro na Primeira leitura
+            arqPtr.readLine(); // pula o cabeçalho
 
             String linhaAtual;
-            while ((linhaAtual = arqPtr.readLine()) != null) { // enquanto nao for fim do arquivo
+            while ((linhaAtual = arqPtr.readLine()) != null) {
 
                 StringBuilder campo = new StringBuilder();
                 boolean dentroAspas = false;
-
                 String[] str = new String[12];
-                int j = 0; // Faz referência aos 11 atributos, irá ser o contador deles
+                int j = 0;
 
                 for (int i = 0; i < linhaAtual.length(); i++) {
                     char c = linhaAtual.charAt(i);
@@ -187,7 +117,7 @@ class Show {
                         dentroAspas = !dentroAspas;
                     } else if (c == ',' && !dentroAspas) {
                         str[j++] = campo.toString().trim();
-                        campo.setLength(0); // campo fica zerado
+                        campo.setLength(0);
                     } else {
                         campo.append(c);
                     }
@@ -197,12 +127,11 @@ class Show {
                     str[j] = campo.toString().trim();
                 }
 
-                // Proteção: ignora se show_Id (campo obrigatório) estiver vazio ou nulo
                 if (str[0] == null || str[0].isEmpty())
                     continue;
 
                 Show show = new Show();
-                
+
                 show.setShow_Id(str[0]);
                 show.setType(str[1]);
                 show.setTitle(str[2]);
@@ -222,6 +151,11 @@ class Show {
                 show.setDuration(str[9]);
                 show.setListenIn((str[10] == null || str[10].isEmpty()) ? new String[] { "NaN" } : str[10].split(", "));
 
+                // Ordena o cast
+                String[] elenco = show.getCast();
+                Show.sort(elenco);
+                show.setCast(elenco);
+
                 lista.add(show);
             }
 
@@ -231,8 +165,25 @@ class Show {
             e.printStackTrace();
         }
 
-        return lista.toArray(new Show[lista.size()]); //Converte uma ArrayList<Show> em um Show[]
+        return lista.toArray(new Show[0]);
+    }
 
+    public static void swap(String[] array, int i, int j) {
+        String temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    public static void sort(String[] array) {
+        for (int i = 0; i < array.length - 1; i++) {
+            int menor = i;
+            for (int j = i + 1; j < array.length; j++) {
+                if (array[j].compareTo(array[menor]) < 0) {
+                    menor = j;
+                }
+            }
+            swap(array, i, menor);
+        }
     }
 }
 
