@@ -33,9 +33,10 @@ void removeN_R(char* str) {
         str[len-1] = '\0';
 }
 
+//Divide uma string com valores separados por vírgulas
 void split_list(char* input, char list[MAX_LIST][MAX_FIELD], int* total_itens) {
-    //Contador elementos da lista, iniciado em 0
-    *count = 0;
+    
+    total_itens = 0;
     
     //Pega o primeiro pedaco da string, até a virgula   
     char* item = strtok(input, ",");
@@ -51,45 +52,45 @@ void split_list(char* input, char list[MAX_LIST][MAX_FIELD], int* total_itens) {
 }
 
 //Ordenacao
-void sort_list(char list[MAX_LIST][MAX_FIELD], int count) {
-    for (int i = 0; i < count - 1; i++) {
-        int min = i;
-        for (int j = i + 1; j < count; j++) {
-            if (strcmp(list[j], list[min]) < 0) {
-                min = j;
+void sort_list(char list[MAX_LIST][MAX_FIELD], int items) {
+    for (int i = 0; i < items - 1; i++) {
+        int menor = i;
+        for (int j = i + 1; j < items; j++) {
+            if (strcmp(list[j], list[menor]) < 0) {
+                menor = j;
             }
         }
-        if (min != i) {
+        if (menor != i) {
             char temp[MAX_FIELD];
             strcpy(temp, list[i]);
-            strcpy(list[i], list[min]);
-            strcpy(list[min], temp);
+            strcpy(list[i], list[menor]);
+            strcpy(list[menorn], temp);
         }
     }
 }
 
 //Print o show todo
-void print_show(const Show* s) {
-    printf("=> %s ## %s ## %s ## ", s->show_id, s->title, s->type);
-    for (int i = 0; i < s->director_count; i++) {
-        printf("%s", s->director[i]);
-        if (i < s->director_count - 1) printf(", ");
+void print_show(const Show* show) {
+    printf("=> %s ## %s ## %s ## ", show->show_id, show->title, show->type);
+    for (int i = 0; i < show->director_count; i++) {
+        printf("%s", show->director[i]);
+        if (i < show->director_count - 1) printf(", ");
     }
     printf(" ## [");
-    for (int i = 0; i < s->cast_count; i++) {
-        printf("%s", s->cast[i]);
-        if (i < s->cast_count - 1) printf(", ");
+    for (int i = 0; i < show->cast_count; i++) {
+        printf("%s", show->cast[i]);
+        if (i < show->cast_count - 1) printf(", ");
     }
     printf("] ## ");
-    for (int i = 0; i < s->country_count; i++) {
-        printf("%s", s->country[i]);
-        if (i < s->country_count - 1) printf(", ");
+    for (int i = 0; i < show->country_count; i++) {
+        printf("%s", show->country[i]);
+        if (i < show->country_count - 1) printf(", ");
     }
-    printf(" ## %s ## %d ## %s ## %s ## [", s->date[0] ? s->date : "March 1, 1900",
-        s->release_year ? s->release_year : 0, s->rating, s->duration);
-    for (int i = 0; i < s->listen_count; i++) {
-        printf("%s", s->listen_in[i]);
-        if (i < s->listen_count - 1) printf(", ");
+    printf(" ## %s ## %d ## %s ## %s ## [", show->date[0] ? show->date : "March 1, 1900",
+        show->release_year ? show->release_year : 0, show->rating, show->duration);
+    for (int i = 0; i < show->listen_count; i++) {
+        printf("%s", show->listen_in[i]);
+        if (i < show->listen_count - 1) printf(", ");
     }
     printf("] ##\n");
 }
