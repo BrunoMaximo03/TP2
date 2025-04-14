@@ -33,25 +33,24 @@ void removeN_R(char* str) {
         str[len-1] = '\0';
 }
 
-//Divide uma string com valores separados por vírgulas
+// Divide uma string com valores separados por vírgulas
 void split_list(char* input, char list[MAX_LIST][MAX_FIELD], int* total_itens) {
+    *total_itens = 0;
     
-    total_itens = 0;
-    
-    //Pega o primeiro pedaco da string, até a virgula   
+    // Pega o primeiro pedaço da string, até a vírgula   
     char* item = strtok(input, ",");
     while (item != NULL && *total_itens < MAX_LIST) {
-        while (*item == ' ') item++;  // remove espaços inicias
+        while (*item == ' ') item++;  // remove espaços iniciais
 
         strcpy(list[*total_itens], item);
         (*total_itens)++;
         
-        //Pega o proximo item da string
+        // Pega o próximo item da string
         item = strtok(NULL, ","); 
     }
 }
 
-//Ordenacao
+// Ordenação
 void sort_list(char list[MAX_LIST][MAX_FIELD], int items) {
     for (int i = 0; i < items - 1; i++) {
         int menor = i;
@@ -64,12 +63,12 @@ void sort_list(char list[MAX_LIST][MAX_FIELD], int items) {
             char temp[MAX_FIELD];
             strcpy(temp, list[i]);
             strcpy(list[i], list[menor]);
-            strcpy(list[menorn], temp);
+            strcpy(list[menor], temp);
         }
     }
 }
 
-//Print o show todo
+// Print do show todo
 void print_show(const Show* show) {
     printf("=> %s ## %s ## %s ## ", show->show_id, show->title, show->type);
     for (int i = 0; i < show->director_count; i++) {
@@ -95,7 +94,7 @@ void print_show(const Show* show) {
     printf("] ##\n");
 }
 
-//Le o arquivo CSV
+// Lê o arquivo CSV
 void read_csv(const char* filename) {
     FILE* file = fopen(filename, "r");
     if (!file) {
@@ -106,11 +105,11 @@ void read_csv(const char* filename) {
     char line[2000];
     fgets(line, sizeof(line), file); // pular cabeçalho
 
-    while (fgets(linha, sizeof(linha), arquivo) && show_count < MAX_SHOWS) {
+    while (fgets(line, sizeof(line), file) && show_count < MAX_SHOWS) {
         char* campos[12];        // Vetor para armazenar os 11 campos do CSV + 1 extra se precisar
         int campo_atual = 0;     // Índice do campo atual sendo processado
-        int dentro_de_aspas =    // Flag para verificar se está dentro de aspas (campos com vírgulas)
-        char* cursor = linha     // Ponteiro para percorrer os caracteres da linha
+        int dentro_de_aspas = 0; // Flag para verificar se está dentro de aspas (campos com vírgulas)
+        char* cursor = line;    // Ponteiro para percorrer os caracteres da linha
     
         campos[0] = cursor;      // Primeiro campo começa no início da linha
     
@@ -132,13 +131,13 @@ void read_csv(const char* filename) {
     
         // Copiar dados simples
         strcpy(espetaculo->show_id, campos[0]);
-        strcpy(espaço->type, campos[1]);
+        strcpy(espetaculo->type, campos[1]);
         strcpy(espetaculo->title, campos[2]);
     
         // Separar listas (diretor, elenco, países, línguas)
-        split_list(campos[3], espetaculo->director, & espetaculo->director_count);
-        split_list(campos[4], espetaculo->cast, & espetaculo->cast_count);
-        split_list(campos[5], espetaculo->country, & espetaculo->country_count);
+        split_list(campos[3], espetaculo->director, &espetaculo->director_count);
+        split_list(campos[4], espetaculo->cast, &espetaculo->cast_count);
+        split_list(campos[5], espetaculo->country, &espetaculo->country_count);
     
         // Outros campos
         strcpy(espetaculo->date, campos[6]);
@@ -146,7 +145,7 @@ void read_csv(const char* filename) {
         strcpy(espetaculo->rating, campos[8]);
         strcpy(espetaculo->duration, campos[9]);
     
-        split_list(campos[10], espetaculo->listen_in, & espetaculo->listen_count);
+        split_list(campos[10], espetaculo->listen_in, &espetaculo->listen_count);
     
         // Ordena cast e línguas
         sort_list(espetaculo->cast, espetaculo->cast_count);
@@ -155,12 +154,10 @@ void read_csv(const char* filename) {
         show_count++; // Próximo show
     }
     
-    fclose(arquivo);
-    
+    fclose(file);
 }
 
-
-//Busca pelo id fornecido
+// Busca pelo id fornecido
 Show* buscar(const char* id) {
     for (int i = 0; i < show_count; i++) {
         if (strcmp(shows[i].show_id, id) == 0) {
@@ -176,12 +173,12 @@ int main() {
     char entrada[100];
     while (1) {
         fgets(entrada, sizeof(entrada), stdin);
-        trim_newline(entrada);
+        removeN_R(entrada);
         if (strcmp(entrada, "FIM") == 0) break;
 
         Show* show = buscar(entrada);
         if (show != NULL) {
-            print_show(s);
+            print_show(show);
         }
     }
 
