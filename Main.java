@@ -155,9 +155,10 @@ class Show {
         return this.listen_in;
     }
 
+    //Busca pelo Id
     public Show buscar(String id) {
         for (int i = 0; i < lista.size(); i++) {
-            if (lista.get(i).getShow_Id().equals(id)) {
+            if (lista.get(i).getShow_Id().equals(id)) { 
                 return lista.get(i);
             }
         }
@@ -170,6 +171,8 @@ class Show {
         return new Show(object); // utiliza o construtor de cópia
     }
 
+    //Formata print Diretor[]
+    // Array de string que vira um só, separado por virgula
     public String formatDirector() {
         if (director.length == 0) {
             return "NaN";
@@ -179,6 +182,7 @@ class Show {
         return String.join(", ",director);
     }
 
+    //Formata print ListenIn[]
     public String formatListenIn() {
         if (listen_in.length == 0) {
             return "NaN";
@@ -186,22 +190,26 @@ class Show {
         return Arrays.toString(listen_in);
     }
 
+    //Formata print Country[]
+    // Array de string que vira um só, separado por virgula
     public String formatCountry() {
         if (country.length == 0) {
             return "NaN";
         } else if (country.length == 1) {
             return country[0];
         }
-        return String.join(", ",country); // Array de string que vira um só, separado por virgula
+        return String.join(", ",country); 
     }
 
+    //Formata print Cast[]
     public String formatCast() {
         if (cast.length == 0) {
             return Arrays.toString(new String[] {"NaN"});
         }
-        return Arrays.toString(cast); // volta o próprio array
+        return Arrays.toString(cast);
     }
 
+    //Printa tudo
     public void printShowComplete() {
         System.out.println(
                 "=> " + show_Id + " ## " + title + " ## " + type + " ## "
@@ -212,7 +220,8 @@ class Show {
                         + " ## " + (release_year == 0 ? "NaN" : release_year) + " ## " + rating + " ## " + duration
                         + " ## " + formatListenIn() + " ##");
     }
-
+    
+    //Le o arquivo csv
     public void readCSV() {
         try {
 
@@ -278,14 +287,15 @@ class Show {
         }
     }
 
+    //Metodos para serem ordenados
     public void ordenar() {
         sort(getCast());
         sort(getListenIn());
     }
 
-    public boolean buscarShow_id(String id) {
+   /*  public boolean buscarShow_id(String id) {
         return show_Id.equals(id);
-    }
+    }*/
 
     public void swap(String[] array, int i, int j) {
         String temp = array[i];
@@ -293,6 +303,7 @@ class Show {
         array[j] = temp;
     }
 
+    //Método de ordenação
     public void sort(String[] array) {
         for (int i = 0; i < array.length - 1; i++) {
             int menor = i;
