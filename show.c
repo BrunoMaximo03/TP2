@@ -27,26 +27,17 @@ typedef struct {
 Show shows[MAX_SHOWS];
 int show_count = 0;
 
-// Remove espaços, aspas, \r e \n do início e fim da string
-void trim(char* str) {
-    while (*str == ' ' || *str == '"' || *str == '\n' || *str == '\r') str++;
-    char* start = str;
-    memmove(str, start, strlen(start) + 1);
-
+void removeN_R(char* str) {
     int len = strlen(str);
-    while (len > 0 && (str[len - 1] == ' ' || str[len - 1] == '"' || str[len - 1] == '\n' || str[len - 1] == '\r')) {
-        str[len - 1] = '\0';
-        len--;
-    }
+    if (len > 0 && (str[len-1] == '\n' || str[len-1] == '\r'))
+        str[len-1] = '\0';
 }
 
-// Divide uma string com valores separados por vírgulas
 void split_list(char* input, char list[MAX_LIST][MAX_FIELD], int* total_itens) {
     *total_itens = 0;
     char* item = strtok(input, ",");
     while (item != NULL && *total_itens < MAX_LIST) {
         while (*item == ' ') item++;
-        trim(item);
         strcpy(list[*total_itens], item);
         (*total_itens)++;
         item = strtok(NULL, ",");
@@ -87,7 +78,7 @@ void print_show(const Show* show) {
         if (i < show->country_count - 1) printf(", ");
     }
     printf(" ## %s ## %d ## %s ## %s ## [", show->date[0] ? show->date : "March 1, 1900",
-           show->release_year ? show->release_year : 0, show->rating, show->duration);
+        show->release_year ? show->release_year : 0, show->rating, show->duration);
     for (int i = 0; i < show->listen_count; i++) {
         printf("%s", show->listen_in[i]);
         if (i < show->listen_count - 1) printf(", ");
@@ -103,56 +94,56 @@ void read_csv(const char* filename) {
     }
 
     char line[2000];
-    fgets(line, sizeof(line), file); // Pula cabeçalho
+    fgets(line, sizeof(line), file);
 
     while (fgets(line, sizeof(line), file) && show_count < MAX_SHOWS) {
-        char* campos[12] = { NULL };
-        int campo_atual = 0;
-        int dentro_de_aspas = 0;
-        char* cursor = line;
-        campos[0] = cursor;
+        char* fields[12];
+        int field_index = 0;
+        int inside_quotes = 0;
+        char* p = line;
+        char* start = line;
 
-        while (*cursor) {
-            if (*cursor == '"') {
-                memmove(cursor, cursor + 1, strlen(cursor));
+        fields[field_index++] = start;
+
+        while (*p) {
+            if (*p == '"') {
+                inside_quotes = !inside_quotes;
+                memmove(p, p + 1, strlen(p));
                 continue;
-            } else if (*cursor == ',' && !dentro_de_aspas) {
-                *cursor = '\0';
-                campos[++campo_atual] = cursor + 1;
+            } else if (*p == ',' && !inside_quotes) {
+                *p = '\0';
+                if (field_index < 12) {
+                    fields[field_index++] = p + 1;
+                }
             }
-            cursor++;
+            p++;
         }
 
-        Show* esp = &shows[show_count];
-
-        for (int i = 0; i <= campo_atual; i++) {
-            trim(campos[i]);
+        while (field_index < 12) {
+            fields[field_index++] = "";
         }
 
-        strcpy(esp->show_id, campos[0]);
-        strcpy(esp->type, campos[1]);
-        strcpy(esp->title, campos[2]);
+        Show* show = &shows[show_count];
+        removeN_R(fields[11]);
 
-        strcpy(campos[3], strlen(campos[3]) ? campos[3] : "NaN");
-        strcpy(campos[4], strlen(campos[4]) ? campos[4] : "NaN");
-        strcpy(campos[5], strlen(campos[5]) ? campos[5] : "NaN");
-        strcpy(campos[6], strlen(campos[6]) ? campos[6] : "March 1, 1900");
-        strcpy(campos[8], strlen(campos[8]) ? campos[8] : "NaN");
-        strcpy(campos[9], strlen(campos[9]) ? campos[9] : "NaN");
-        strcpy(campos[10], strlen(campos[10]) ? campos[10] : "NaN");
+        strcpy(show->show_id, strlen(fields[0]) > 0 ? fields[0] : "NaN");
+        strcpy(show->type, strlen(fields[1]) > 0 ? fields[1] : "NaN");
+        strcpy(show->title, strlen(fields[2]) > 0 ? fields[2] : "NaN");
 
-        split_list(campos[3], esp->director, &esp->director_count);
-        split_list(campos[4], esp->cast, &esp->cast_count);
-        split_list(campos[5], esp->country, &esp->country_count);
+        split_list(strlen(fields[3]) > 0 ? fields[3] : "NaN", show->director, &show->director_count);
+        split_list(strlen(fields[4]) > 0 ? fields[4] : "NaN", show->cast, &show->cast_count);
+        split_list(strlen(fields[5]) > 0 ? fields[5] : "NaN", show->country, &show->country_count);
 
-        strcpy(esp->date, campos[6]);
-        esp->release_year = atoi(campos[7]);
-        strcpy(esp->rating, campos[8]);
-        strcpy(esp->duration, campos[9]);
-        split_list(campos[10], esp->listen_in, &esp->listen_count);
+        strcpy(show->date, strlen(fields[6]) > 0 ? fields[6] : "March 1, 1900");
+        show->release_year = strlen(fields[7]) > 0 ? atoi(fields[7]) : 0;
 
-        sort_list(esp->cast, esp->cast_count);
-        sort_list(esp->listen_in, esp->listen_count);
+        strcpy(show->rating, strlen(fields[8]) > 0 ? fields[8] : "NaN");
+        strcpy(show->duration, strlen(fields[9]) > 0 ? fields[9] : "NaN");
+
+        split_list(strlen(fields[10]) > 0 ? fields[10] : "NaN", show->listen_in, &show->listen_count);
+
+        sort_list(show->cast, show->cast_count);
+        sort_list(show->listen_in, show->listen_count);
 
         show_count++;
     }
@@ -175,7 +166,7 @@ int main() {
     char entrada[100];
     while (1) {
         fgets(entrada, sizeof(entrada), stdin);
-        trim(entrada);
+        removeN_R(entrada);
         if (strcmp(entrada, "FIM") == 0) break;
 
         Show* show = buscar(entrada);
