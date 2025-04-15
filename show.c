@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_SHOWS 1000
+#define MAX_SHOWS 2000
 #define MAX_FIELD 300
 #define MAX_LIST 20
 
