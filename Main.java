@@ -168,7 +168,7 @@ class Show {
     /* ================== CLONE ===================== */
 
     public Show cloneClasse(Show object) {
-        return new Show(object); // utiliza o construtor de cópia
+        return new Show(object); // utiliza o construtor de cópia    
     }
 
     //Formata print Diretor[]
@@ -320,12 +320,13 @@ class Show {
 public class Main {
     public static void main(String[] args) {
         Show show = new Show();
-        show.readCSV();
+        show.readCSV(); //lendo o CSV
+
         Scanner scanner = new Scanner(System.in,"ISO-8859-1");
         String string = "";
         do {
             string = scanner.nextLine();
-            Show espetaculo = show.buscar(string);
+            Show espetaculo = show.buscar(string); //espetaculo vai receber os dados do CSV
             if (espetaculo != null) {
                 espetaculo.printShowComplete();
             }
