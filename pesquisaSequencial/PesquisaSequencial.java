@@ -155,7 +155,7 @@ class Show {
     }
 
     //Busca pelo Id
-    public Show buscar(String id) {
+    public Show buscarID(String id) {
         id = 's' + id;
         for (int i = 0; i < lista.size(); i++) {
             System.out.println("ANTES DO IF");
@@ -164,6 +164,16 @@ class Show {
             if (lista.get(i).getShow_Id().equals(id)) {
                 return lista.get(i);
             }   
+        }
+        return null;
+    }
+
+    public Show buscaTitle(String titulo) {
+        for(int i = 0; i < lista.size(); i++) {
+            System.out.println("Antes do if ");
+            if(lista.get(i).getTitle().equals(titulo)) {
+                return lista.get(i);
+            }
         }
         return null;
     }
@@ -332,14 +342,14 @@ public class PesquisaSequencial {
             show.printShowComplete();
         }*/
 
-        ArrayList<Show> inseridos = new ArrayList<>();
+        ArrayList<Show> inseridos = new ArrayList<>(); //lista de INSERIDOS CRIADA
 
-        Show espetaculo = new Show(); //ainda NULO
+        Show espetaculo = new Show(); //ainda NULO e irá receber os IDS
         String entrada = scanner.nextLine();
 
         System.out.println("Pegando ids...");
         while (!entrada.equals("FIM")) {
-            espetaculo = dados.buscar(entrada);
+            espetaculo = dados.buscarID(entrada);
             if (espetaculo != null) {
                 inseridos.add(espetaculo);
                 System.out.println("Foi adicionado");
