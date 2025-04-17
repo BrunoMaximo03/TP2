@@ -238,7 +238,7 @@ class Show {
     public void readCSV() {
         try {
 
-            String caminho = "disneyplus.csv";
+            String caminho = "/tmp/disneyplus.csv";
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "UTF-8"));
             br.readLine(); // pula o cabeçalho
 
