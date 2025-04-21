@@ -166,8 +166,6 @@ class Show {
     public Show buscarID(String id) {
         id = 's' + id;
         for (int i = 0; i < lista.size(); i++) {
-            System.out.println("LISTA ID  " + lista.get(i).getShow_Id());
-            System.out.println(id);
             if (lista.get(i).getShow_Id().equals(id)) { 
                 return lista.get(i);
             }
@@ -381,23 +379,15 @@ public class OrdenacaoSelecao {
         int[] comparacoes = {0}; //usando array para passar por referência, e conseguir usar no main
         int[] movimentacoes = {0}; //usando array para passar por referência, e conseguir usar no main
 
-        for(Show s : titulos) {
-            s.printShowComplete();
-        }
-
         long inicio = System.currentTimeMillis();
 
         ordenaTitulos(titulos, comparacoes, movimentacoes);
 
-        long fim = System.currentTimeMillis();
-
-        System.out.println("Pos ordenacao! ");
         for(Show s : titulos) {
             s.printShowComplete();
         }
-        
-        System.out.println("Comparacoes = " + comparacoes[0]);
-        System.out.println("Movimentacoes = " + movimentacoes[0]);
+
+        long fim = System.currentTimeMillis();
 
         try {
             java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_selecao.txt", "UTF-8");
