@@ -158,9 +158,6 @@ class Show {
     public Show buscarID(String id) {
         id = 's' + id;
         for (int i = 0; i < lista.size(); i++) {
-            System.out.println("ANTES DO IF");
-            System.out.println("LISTA ID  " + lista.get(i).getShow_Id());
-            System.out.println(id);
             if (lista.get(i).getShow_Id().equals(id)) {
                 return lista.get(i);
             }   
@@ -347,12 +344,10 @@ public class PesquisaSequencial {
         Show espetaculo = new Show(); //ainda NULO e irá receber os IDS
         String entrada = scanner.nextLine();
 
-        System.out.println("Pegando ids...");
         while (!entrada.equals("FIM")) {
             espetaculo = dados.buscarID(entrada);
             if (espetaculo != null) {
                 inseridos.add(espetaculo);
-                System.out.println("Foi adicionado");
             }
             entrada = scanner.nextLine();
         }
@@ -366,9 +361,7 @@ public class PesquisaSequencial {
         
         int comparacoes = 0;
         long inicio = System.currentTimeMillis();
-
         
-        System.out.println("Conferindo se os titulos existem");
         entrada = scanner.nextLine();
         while (!entrada.equals("FIM")) {
             boolean found = false;
