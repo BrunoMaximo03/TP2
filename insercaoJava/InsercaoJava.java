@@ -304,7 +304,8 @@ class Show {
             Show tmp = array.get(i);
             int j = i - 1;
 
-            while ((j >= 0) && (array.get(j).getType().concat(getTitle()).compareTo(tmp.getType().concat(getTitle())) > 0)) {
+            while ((j >= 0)
+                    && (array.get(j).getType().concat(getTitle()).compareTo(tmp.getType().concat(getTitle())) > 0)) {
                 lista.set(j + 1, array.get(j));
                 j--;
             }
@@ -342,65 +343,65 @@ class Show {
          * }
          */
     }
+}
 
-    public class InsercaoJava {
+public class InsercaoJava {
 
-        public void sort(ArrayList<Show> array, int[] movimentacoes, int[] comparacoes) {
-            for (int i = 1; i < array.size(); i++) {
-                Show tmp = array.get(i);
-                int j = i - 1;
-    
-                while ((j >= 0) && (array.get(j).getType().concat(getTitle()).compareTo(tmp.getType().concat(getTitle())) > 0)) {
-                    lista.set(j + 1, array.get(j));
-                    comparacoes[0]++;
-                    j--;
-                }
-                lista.set(j + 1, tmp);
+    public void sort(ArrayList<Show> array, int[] movimentacoes, int[] comparacoes) {
+        for (int i = 1; i < array.size(); i++) {
+            Show tmp = array.get(i);
+            int j = i - 1;
+
+            while ((j >= 0) && (array.get(j).getType().concat(array.get(j).getTitle())
+                    .compareTo(tmp.getType().concat(tmp.getTitle())) > 0)) {
+                array.set(j + 1, array.get(j));
+                comparacoes[0]++;
+                movimentacoes[0]++;
+                j--;
             }
+            array.set(j + 1, tmp);
+            movimentacoes[0]++;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Show show = new Show();
+        show.readCSV();
+
+        ArrayList<Show> inseridos = new ArrayList<>();
+
+        String entrada = scanner.nextLine();
+        while (!entrada.equals("FIM")) {
+            Show espetaculo = show.buscarID(entrada);
+            if (espetaculo != null) {
+                inseridos.add(espetaculo);
+                System.out.println("Id inserido");
             }
+            entrada = scanner.nextLine();
+        }
 
-        public static void main(String[] args) {
-            Scanner scanner = new Scanner(System.in);
-            Show show = new Show();
-            show.readCSV(); // leu o csv, e guardou os dados
+        int[] comparacoes = { 0 };
+        int[] movimentacoes = { 0 };
+        long inicio = System.currentTimeMillis();
 
-            ArrayList<Show> inseridos = new ArrayList<>(); // vetor criado
+        InsercaoJava insercao = new InsercaoJava();
+        insercao.sort(inseridos, movimentacoes, comparacoes);
 
-            Show espetaculo = new Show(); // ainda nulo, mas irá receber os IDS
+        for (Show s : inseridos) {
+            s.printShowComplete();
+        }
 
-            String entrada = scanner.nextLine();
-            while (!entrada.equals("FIM")) {
-                espetaculo = show.buscarID(entrada);
-                if (espetaculo != null) {
-                    inseridos.add(espetaculo);
-                    System.out.println("Id inserido");
-                }
-                entrada = scanner.nextLine();
-            }
+        long fim = System.currentTimeMillis();
 
-            int[] comparacoes = {0};
-            int[] movimentacoes = {0};
-            long inicio = System.currentTimeMillis();
+        scanner.close();
 
-            show.sort(inseridos); //ordenação
-
-            for(Show s : inseridos) {
-                s.printShowComplete();
-            }
-
-            long fim = System.currentTimeMillis();
-
-            scanner.close();
-
-            try {
-                java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_insercao.txt", "UTF-8");
-                arquivo.printf("850847\t%d\t%d\t%dms\n",comparacoes[0],movimentacoes[0],(inicio - fim));
-                arquivo.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            
-
+        try {
+            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_insercao.txt", "UTF-8");
+            arquivo.printf("850847\t%d\t%d\t%dms\n", comparacoes[0], movimentacoes[0], (fim - inicio));
+            arquivo.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
