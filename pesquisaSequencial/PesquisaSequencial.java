@@ -154,18 +154,7 @@ class Show {
         return this.lista;
     }
 
-    //Busca pelo Id
-    public Show buscarID(String id) {
-        id = 's' + id;
-        for (int i = 0; i < lista.size(); i++) {
-            if (lista.get(i).getShow_Id().equals(id)) {
-                return lista.get(i);
-            }   
-        }
-        return null;
-    }
-
-    public Show buscaTitle(String titulo) {
+    public  Show buscaTitle(String titulo) {
         for(int i = 0; i < lista.size(); i++) {
             System.out.println("Antes do if ");
             if(lista.get(i).getTitle().equals(titulo)) {
@@ -232,7 +221,7 @@ class Show {
     }
     
     //Le o arquivo csv
-    public void readCSV() {
+    public void readCSV(ArrayList<Show> lista) {
         try {
 
             String caminho = "/tmp/disneyplus.csv";
@@ -328,11 +317,23 @@ class Show {
 }
 
 public class PesquisaSequencial {
+
+    //Busca pelo Id
+    public static Show buscarID(String id, ArrayList<Show> lista) {
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i).getShow_Id().equals(id)) {
+                return lista.get(i);
+            }   
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in, "ISO-8859-1");
         Show dados = new Show();
-        dados.readCSV(); //lendo o csv
+        ArrayList<Show> todos = new ArrayList<>();
+        dados.readCSV(todos); //lendo o csv
 
        /*  ArrayList<Show> recebeDados = dados.getLista(); //recebe as informações de DADOS que contém o CSV
         for(Show show : recebeDados) {
@@ -341,11 +342,10 @@ public class PesquisaSequencial {
 
         ArrayList<Show> inseridos = new ArrayList<>(); //lista de INSERIDOS CRIADA
 
-        Show espetaculo = new Show(); //ainda NULO e irá receber os IDS
         String entrada = scanner.nextLine();
 
         while (!entrada.equals("FIM")) {
-            espetaculo = dados.buscarID(entrada);
+            Show espetaculo = buscarID(entrada,todos);
             if (espetaculo != null) {
                 inseridos.add(espetaculo);
             }
