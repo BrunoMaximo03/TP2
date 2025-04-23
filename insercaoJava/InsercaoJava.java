@@ -154,17 +154,6 @@ class Show {
         return this.listen_in;
     }
 
-    // Busca pelo Id
-    public Show buscarID(String id) {
-        id = 's' + id;
-        for (int i = 0; i < lista.size(); i++) {
-            if (lista.get(i).getShow_Id().equals(id)) {
-                System.out.println("Id retornado");
-                return lista.get(i);
-            }
-        }
-        return null;
-    }
 
     /* ================== CLONE ===================== */
 
@@ -223,7 +212,7 @@ class Show {
     }
 
     // Le o arquivo csv
-    public void readCSV() {
+    public void readCSV(ArrayList<Show> lista) {
         try {
 
             String caminho = "/tmp/disneyplus.csv";
@@ -364,16 +353,28 @@ public class InsercaoJava {
         }
     }
 
+    // Busca pelo Id
+    public static Show buscarID(String id, ArrayList<Show> lista) {
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i).getShow_Id().equals(id)) {
+                System.out.println("Id retornado");
+                return lista.get(i);
+            }
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Show show = new Show();
-        show.readCSV();
+        ArrayList<Show> todos = new ArrayList<>();
+        show.readCSV(todos);
 
         ArrayList<Show> inseridos = new ArrayList<>();
 
         String entrada = scanner.nextLine();
         while (!entrada.equals("FIM")) {
-            Show espetaculo = show.buscarID(entrada);
+            Show espetaculo = buscarID(entrada,todos);
             if (espetaculo != null) {
                 inseridos.add(espetaculo);
                 System.out.println("Id inserido");
