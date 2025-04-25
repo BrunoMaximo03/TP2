@@ -214,7 +214,7 @@ class Show {
     public void readCSV(ArrayList<Show> lista) {
         try {
 
-            String caminho = "disneyplus.csv";
+            String caminho = "/tmp/disneyplus.csv";
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "UTF-8"));
             br.readLine(); // pula o cabeçalho
 
@@ -394,9 +394,9 @@ public class HeapSortJava {
     }
     
     public static Show buscarID(String id, ArrayList<Show> lista) {
+       // System.out.println(lista.size());
         for (int i = 0; i < lista.size(); i++) {
-            if (lista.get(i).getShow_Id().equals(id)) {
-                System.out.println("Id retornado");
+            if (lista.get(i).getShow_Id().trim().equals(id.trim())) {
                 return lista.get(i);
             }
         }
@@ -408,6 +408,7 @@ public class HeapSortJava {
         Show show = new Show();
         ArrayList<Show> todos = new ArrayList<>();
         show.readCSV(todos);  // instancia um Show só pra acessar o método não estático
+
         
         ArrayList<Show> inseridos = new ArrayList<>();
         String entrada = scanner.nextLine();
@@ -416,16 +417,9 @@ public class HeapSortJava {
             Show espetaculo = buscarID(entrada,todos);
             if (espetaculo != null) {
                 inseridos.add(espetaculo);
-                System.out.println("Id inserido");
             }
             entrada = scanner.nextLine();
-
-        }
-
-            for(Show p : inseridos) {
-            p.printShowComplete();
-        }
-        
+        }        
 
         int[] comparacoes = { 0 };
         int[] movimentacoes = { 0 };
@@ -446,8 +440,6 @@ public class HeapSortJava {
             java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_insercao.txt", "UTF-8");
             arquivo.printf("850847\t%d\t%d\t%dms\n", comparacoes[0], movimentacoes[0], (fim - inicio));
             arquivo.close();
-            System.out.println("olaa 124");
-
         } catch (Exception e) {
             e.printStackTrace();
         }
