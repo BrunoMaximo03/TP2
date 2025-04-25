@@ -347,7 +347,7 @@ public class Selecao {
     }
 
     //Busca pelo Id
-    public static Show buscarID(String id, ArrayList<Show> lista) {
+    public static Show buscarID(String id, ArrayList<Show> lista) { //id = 's' + id
         for (int i = 0; i < lista.size(); i++) {
             if (lista.get(i).getShow_Id().equals(id)) { 
                 return lista.get(i);
