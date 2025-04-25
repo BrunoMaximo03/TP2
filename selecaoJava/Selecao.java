@@ -231,7 +231,7 @@ class Show {
     public void readCSV(ArrayList<Show> lista) {
         try {
 
-            String caminho = "disneyplus.csv";
+            String caminho = "/tmp/disneyplus.csv";
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "UTF-8"));
             br.readLine(); // pula o cabeçalho
 
@@ -348,7 +348,6 @@ public class Selecao {
 
     //Busca pelo Id
     public static Show buscarID(String id, ArrayList<Show> lista) {
-        id = 's' + id;
         for (int i = 0; i < lista.size(); i++) {
             if (lista.get(i).getShow_Id().equals(id)) { 
                 return lista.get(i);
@@ -372,7 +371,6 @@ public class Selecao {
             Show id = buscarID(string,todos);
             if (id != null) {
                 titulos.add(id);
-                System.out.println("ID inserido!");
             }
             string = scanner.nextLine();
         }
