@@ -357,7 +357,6 @@ public class InsercaoJava {
     public static Show buscarID(String id, ArrayList<Show> lista) {
         for (int i = 0; i < lista.size(); i++) {
             if (lista.get(i).getShow_Id().equals(id)) {
-                System.out.println("Id retornado");
                 return lista.get(i);
             }
         }
@@ -377,7 +376,6 @@ public class InsercaoJava {
             Show espetaculo = buscarID(entrada,todos);
             if (espetaculo != null) {
                 inseridos.add(espetaculo);
-                System.out.println("Id inserido");
             }
             entrada = scanner.nextLine();
         }
