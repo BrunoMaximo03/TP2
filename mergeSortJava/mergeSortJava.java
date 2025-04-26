@@ -340,7 +340,7 @@ public class mergeSortJava {
     public void mergeSort(ArrayList<Show> lista, int esquerda, int direita, int[] comparacoes, int[] movimentacoes) {
         if (esquerda < direita) {
             int meio = (esquerda + direita) / 2;
-            mergeSort(lista, esquerda, meio, comparacoes, movimentacoes);
+             mergeSort(lista, esquerda, meio, comparacoes, movimentacoes);
             mergeSort(lista, meio + 1, direita, comparacoes, movimentacoes);
             intercalar(lista, esquerda, meio, direita, comparacoes, movimentacoes);
         }
@@ -366,7 +366,7 @@ public class mergeSortJava {
 
         // iniciando o segundo SubArray
         for (int j = 0; j < n2; j++) {
-            direitaLista.add(lista.get(direita + 1 + j));
+            direitaLista.add(lista.get(meio + 1 + j));
             movimentacoes[0]++;
         }
 
@@ -442,6 +442,7 @@ public class mergeSortJava {
         long inicio = System.currentTimeMillis();
         
         mergeSortJava merge = new mergeSortJava();
+
         merge.mergeSort(inseridos, 0, inseridos.size() - 1, comparacoes, movimentacoes);
 
         for (Show s : inseridos) {
