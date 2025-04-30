@@ -218,7 +218,7 @@ class Show {
     //Printa tudo
     public void printShowComplete() {
         System.out.println(
-                "=> " + show_Id + " ## " + type + " ## " + titulo + " ## "
+                "=> " + show_Id + " ## " + titulo + " ## " + type + " ## "
                         + formatDirector() + " ## "
                         + formatCast() + " ## "
                         + formatCountry() + " ## "
