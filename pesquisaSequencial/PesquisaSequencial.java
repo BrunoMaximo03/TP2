@@ -224,7 +224,7 @@ class Show {
     public void readCSV(ArrayList<Show> lista) {
         try {
 
-            String caminho = "/tmp/disneyplus.csv";
+            String caminho = "disneyplus.csv";
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "UTF-8"));
             br.readLine(); // pula o cabeçalho
 
@@ -373,7 +373,6 @@ public class PesquisaSequencial {
                 }
             }
             System.out.println(found ? "SIM" : "NAO");
-            entrada = scanner.nextLine();
         }
 
         // Agora sim, pode fechar
